@@ -30,12 +30,8 @@ public class PlayerBahviour : MonoBehaviour
 
     void Update()
     {
-        // Ensure the cursor is always locked when set
-        //if (lockCursor)
-        //{
-        //    Cursor.lockState = CursorLockMode.Locked;
-        //}
-        Cursor.lockState = CursorLockMode.Confined;
+     
+        Cursor.lockState = CursorLockMode.Locked;
         // Allow the script to clamp based on a desired target value.
         var targetOrientation = Quaternion.Euler(targetDirection);
         var targetCharacterOrientation = Quaternion.Euler(targetCharacterDirection);
@@ -61,7 +57,7 @@ public class PlayerBahviour : MonoBehaviour
         if (clampInDegrees.y < 360)
             _mouseAbsolute.y = Mathf.Clamp(_mouseAbsolute.y, -clampInDegrees.y * 0.5f, clampInDegrees.y * 0.5f);
 
-        transform.localRotation = Quaternion.AngleAxis(-_mouseAbsolute.y, targetOrientation * Vector3.zero) * targetOrientation;
+        transform.localRotation = Quaternion.AngleAxis(-_mouseAbsolute.y, targetOrientation * Vector3.right) * targetOrientation;
 
         // If there's a character body that acts as a parent to the camera
         if (characterBody)

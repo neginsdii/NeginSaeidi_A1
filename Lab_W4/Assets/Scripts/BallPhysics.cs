@@ -21,7 +21,7 @@ public class BallPhysics : MonoBehaviour
 
     // Start is called before the first frame update
     void Start()
-    {
+    {//setting the timer for respawn
         targetTime = 5.0f;
         transform.position = spawnPos.position;
         m_rb = GetComponent<Rigidbody>();
@@ -34,18 +34,20 @@ public class BallPhysics : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        _CheckBounds();
+        _CheckTime();
+        //if the ball is not kicked yet,set the velocity to zero
 		if (m_bIsGrounded)
 		{
             GetComponent<Rigidbody>().velocity = Vector3.zero;
         }
+        //count down the time to respawn the ball
         if (!m_bIsGrounded)
         {
             targetTime -= Time.deltaTime;
         }
             Debug.Log(targetTime);
 
-
+        //if lef mouse button is down and the ball in not kicked yed
         if (Input.GetMouseButtonDown(0) && m_bIsGrounded && m_TargetDisplay.transform.position.y > 0.1)
         {
             m_fDistanceToTarget = (m_TargetDisplay.transform.position - transform.position).magnitude;
@@ -56,7 +58,7 @@ public class BallPhysics : MonoBehaviour
     }
 
     private void CreateTargetDisplay()
-    {
+    {//settng the target position we created in the scene
         m_TargetDisplay = FindObjectOfType<TargetPhysics>();
        
     }
@@ -77,6 +79,7 @@ public class BallPhysics : MonoBehaviour
         float fTheta = Mathf.Atan((4 * fMaxHeight) / (fRange));
 
         float fInitVelMag = Mathf.Sqrt((2 * Mathf.Abs(Physics.gravity.y) * fMaxHeight)) / Mathf.Sin(fTheta);
+        //x component of the velocity is magnitude of velocty in the forward direction of the ball
         m_vInitialVel.x = fInitVelMag * transform.forward.x;
         m_vInitialVel.y = fInitVelMag * Mathf.Sin(fTheta);
         m_vInitialVel.z = fInitVelMag * Mathf.Cos(fTheta);
@@ -90,10 +93,9 @@ public class BallPhysics : MonoBehaviour
         Gizmos.DrawLine(transform.position + vDebugHeading, transform.position);
     }
 
-    private void _CheckBounds()
+    private void _CheckTime()
     {
-        //if (Vector3.Distance(transform.position,spawnPos.position) > 80.0)
-        //{
+        //after 5 secs the ball has been kicked respawn the ball
             if (targetTime <= 0)
             {
                 transform.position = spawnPos.position;
@@ -101,6 +103,6 @@ public class BallPhysics : MonoBehaviour
                 m_bIsGrounded = true;
                 targetTime = 5.0f;
             }
-        //}
+        
     }
 }

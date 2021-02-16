@@ -9,45 +9,43 @@ public class TargetPhysics : MonoBehaviour
     private float range;
     [SerializeField]
     private Vector3 pos;
+    private Vector3 prepos;
+
     // Start is called before the first frame update
     void Start()
     {
-        GetComponent<MeshRenderer>().enabled = false;
+        //GetComponent<MeshRenderer>().enabled = false;
+
         range = 12.4f;
         ball = FindObjectOfType<BallPhysics>();
         pos.x = ball.transform.position.x + ball.transform.forward.x * range;
         pos.y = 3.0f;
         pos.z = ball.transform.position.z + ball.transform.forward.z * range;
+        prepos = pos;
         transform.position=pos;
     }
 
     // Update is called once per frame
     void Update()
     {
-
-        //if (Input.GetAxisRaw("Vertical") > 0.0f)
-        //{
-        //    // move forward
-         
-        //    range += 0.1f;
-        //    Debug.Log(range);
-        //}
-
-        //if (Input.GetAxisRaw("Vertical") < 0.0f)
-        //{
-        //    // move Back
-        //    range -= 0.1f;
-        //}
+        //setting the position of the target based on the ball's forward direction when ball is on the ground
 
         if (ball.m_bIsGrounded)
         {
-            
-            pos.x = ball.transform.position.x + ball.transform.forward.x * range;
-            pos.y = ball.transform.position.y + ball.transform.forward.y * range;
-            pos.z = ball.transform.position.z + ball.transform.forward.z * range;
-            transform.position = pos;
-            GetComponent<MeshRenderer>().enabled = false;
-		}
+           
+                pos.x = ball.transform.position.x + ball.transform.forward.x * range;
+                pos.y = ball.transform.position.y + ball.transform.forward.y * range;
+                pos.z = ball.transform.position.z + ball.transform.forward.z * range;
+            //to avoid jittering 
+            if (Vector3.Distance(pos, prepos) > 1.2)
+            {
+                prepos = pos;
+
+                transform.position = pos;
+            }
+            Debug.Log(pos);
+            GetComponent<MeshRenderer>().enabled = true;
+		}//making target invisible when ball is not on the ground
 		else { GetComponent<MeshRenderer>().enabled = false; }
 
     }
