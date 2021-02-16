@@ -7,15 +7,14 @@ public class BallPhysics : MonoBehaviour
     private Vector3 m_vTargetPos;
     [SerializeField]
     private Vector3 m_vInitialVel;
-    [SerializeField]
-    private bool m_bDebugKickBall = false;
+
     [SerializeField]
     private Transform spawnPos;
     private Rigidbody m_rb = null;
     private TargetPhysics m_TargetDisplay = null;
 
     public bool m_bIsGrounded = true;
-
+    public float targetTime = 5.0f;
     private float m_fDistanceToTarget = 0f;
 
     private Vector3 vDebugHeading;
@@ -23,6 +22,7 @@ public class BallPhysics : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        targetTime = 5.0f;
         transform.position = spawnPos.position;
         m_rb = GetComponent<Rigidbody>();
         Assert.IsNotNull(m_rb, "Houston, we've got a problem here! No Rigidbody attached");
@@ -39,12 +39,18 @@ public class BallPhysics : MonoBehaviour
 		{
             GetComponent<Rigidbody>().velocity = Vector3.zero;
         }
-        
+        if (!m_bIsGrounded)
+        {
+            targetTime -= Time.deltaTime;
+        }
+            Debug.Log(targetTime);
+
+
         if (Input.GetMouseButtonDown(0) && m_bIsGrounded && m_TargetDisplay.transform.position.y > 0.1)
         {
             m_fDistanceToTarget = (m_TargetDisplay.transform.position - transform.position).magnitude;
             m_bIsGrounded = false;
-            m_bDebugKickBall = false;
+          
             OnKickBall();
         }
     }
@@ -86,11 +92,15 @@ public class BallPhysics : MonoBehaviour
 
     private void _CheckBounds()
     {
-        if (Vector3.Distance(transform.position,spawnPos.position) > 80.0)
-        {
-            transform.position = spawnPos.position;
-            GetComponent<Rigidbody>().velocity = Vector3.zero;
-            m_bIsGrounded = true;
-        }
+        //if (Vector3.Distance(transform.position,spawnPos.position) > 80.0)
+        //{
+            if (targetTime <= 0)
+            {
+                transform.position = spawnPos.position;
+                GetComponent<Rigidbody>().velocity = Vector3.zero;
+                m_bIsGrounded = true;
+                targetTime = 5.0f;
+            }
+        //}
     }
 }

@@ -12,7 +12,8 @@ public class TargetPhysics : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        range = 5.0f;
+        GetComponent<MeshRenderer>().enabled = false;
+        range = 12.4f;
         ball = FindObjectOfType<BallPhysics>();
         pos.x = ball.transform.position.x + ball.transform.forward.x * range;
         pos.y = 3.0f;
@@ -24,18 +25,19 @@ public class TargetPhysics : MonoBehaviour
     void Update()
     {
 
-        if (Input.GetAxisRaw("Vertical") > 0.0f)
-        {
-            // move forward
+        //if (Input.GetAxisRaw("Vertical") > 0.0f)
+        //{
+        //    // move forward
          
-            range += 0.1f;
-        }
+        //    range += 0.1f;
+        //    Debug.Log(range);
+        //}
 
-        if (Input.GetAxisRaw("Vertical") < 0.0f)
-        {
-            // move Back
-            range -= 0.1f;
-        }
+        //if (Input.GetAxisRaw("Vertical") < 0.0f)
+        //{
+        //    // move Back
+        //    range -= 0.1f;
+        //}
 
         if (ball.m_bIsGrounded)
         {
@@ -44,7 +46,7 @@ public class TargetPhysics : MonoBehaviour
             pos.y = ball.transform.position.y + ball.transform.forward.y * range;
             pos.z = ball.transform.position.z + ball.transform.forward.z * range;
             transform.position = pos;
-            GetComponent<MeshRenderer>().enabled = true;
+            GetComponent<MeshRenderer>().enabled = false;
 		}
 		else { GetComponent<MeshRenderer>().enabled = false; }
 

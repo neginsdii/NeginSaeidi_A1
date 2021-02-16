@@ -35,7 +35,7 @@ public class BallRotation : MonoBehaviour
         //{
         //    Cursor.lockState = CursorLockMode.Locked;
         //}
-        Cursor.lockState = CursorLockMode.Confined;
+        Cursor.lockState = CursorLockMode.Locked;
         // Allow the script to clamp based on a desired target value.
         var targetOrientation = Quaternion.Euler(targetDirection);
         var targetCharacterOrientation = Quaternion.Euler(targetCharacterDirection);
